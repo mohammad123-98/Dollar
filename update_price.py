@@ -54,7 +54,7 @@ def update_gist(price):
     url = f"https://api.github.com/gists/{GIST_ID}"
 
     headers = {
-        "Authorization": f"Bearer {MY_TOKEN}",
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28"
     }
