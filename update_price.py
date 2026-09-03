@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 TGJU_URL = "https://www.tgju.org/profile/price_dollar_rl"
 
 GIST_ID = os.environ["GIST_ID"]
-GITHUB_TOKEN = os.environ["GITHUB_TOKEN_GIST"]
+GITHUB_TOKEN = os.environ["MY_TOKEN"]
 
 
 def get_dollar_price():
@@ -54,7 +54,7 @@ def update_gist(price):
     url = f"https://api.github.com/gists/{GIST_ID}"
 
     headers = {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Authorization": f"Bearer {MY_TOKEN}",
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28"
     }
