@@ -2,270 +2,645 @@
 <html lang="fa" dir="rtl">
 
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دلار چنده ایرانی!</title>
 
-    <meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<style>
+    * { box-sizing: border-box; }
 
-    <title>دلار چنده؟</title>
+    :root{
+        --bg-deep:#0a0d10;
+        --bg-mid:#11161a;
+        --panel:#151b20;
+        --bezel:#262e34;
+        --rivet:#3a444c;
+        --accent:#ffb020;
+        --accent-soft:rgba(255,176,32,.16);
+        --up:#2bd48a;
+        --down:#ff5c5c;
+        --ink:#f4efe4;
+        --ink-dim:#8b95a1;
+        --ink-faint:#5b6570;
+        --radius-board:26px;
+        --radius-inner:18px;
+        --font:'Vazirmatn',Tahoma,Arial,sans-serif;
+    }
 
-    <style>
+    body{
+        margin:0;
+        min-height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:24px 14px;
+        font-family:var(--font);
+        color:var(--ink);
+        background:
+            repeating-linear-gradient(45deg, rgba(255,255,255,.025) 0 1px, transparent 1px 42px),
+            repeating-linear-gradient(-45deg, rgba(255,255,255,.025) 0 1px, transparent 1px 42px),
+            radial-gradient(circle at 25% 15%, #17222b 0%, transparent 45%),
+            radial-gradient(circle at 80% 90%, #1a1420 0%, transparent 45%),
+            var(--bg-deep);
+        -webkit-font-smoothing:antialiased;
+    }
 
-        * {
-            box-sizing: border-box;
-        }
+    .stage{
+        width:min(94%, 460px);
+        display:flex;
+        flex-direction:column;
+        gap:12px;
+    }
 
-        body {
-            margin: 0;
-            min-height: 100vh;
+    /* ---------- board ---------- */
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    .board{
+        position:relative;
+        padding:28px 24px 18px;
+        border-radius:var(--radius-board);
+        background:linear-gradient(180deg, var(--bg-mid), var(--panel));
+        border:1px solid var(--bezel);
+        box-shadow:
+            0 30px 70px rgba(0,0,0,.55),
+            inset 0 1px 0 rgba(255,255,255,.05);
+        animation:appear .7s cubic-bezier(.2,.8,.2,1);
+        transition:padding .35s ease;
+    }
 
-            font-family:
-                Tahoma,
-                Arial,
-                sans-serif;
+    .board.compact{ padding:18px 18px 12px; }
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #eef2ff,
-                    #f8fafc
-                );
-        }
+    @keyframes appear{
+        from{ opacity:0; transform:translateY(18px) scale(.97); }
+        to{ opacity:1; transform:translateY(0) scale(1); }
+    }
 
-        .card {
+    .rivet{
+        position:absolute;
+        width:7px; height:7px;
+        border-radius:50%;
+        background:radial-gradient(circle at 35% 30%, #6b7580, var(--rivet) 70%);
+        box-shadow:0 1px 2px rgba(0,0,0,.6);
+    }
+    .rivet.tl{ top:12px; left:12px; }
+    .rivet.tr{ top:12px; right:12px; }
+    .rivet.bl{ bottom:12px; left:12px; }
+    .rivet.br{ bottom:12px; right:12px; }
 
-            width: 90%;
-            max-width: 450px;
+    .board-header{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        margin-bottom:6px;
+    }
 
-            background: white;
+    .badge{
+        display:inline-flex;
+        align-items:center;
+        gap:6px;
+        padding:6px 10px;
+        border-radius:9px;
+        background:var(--bg-deep);
+        border:1px solid var(--bezel);
+        font-family:monospace;
+        font-size:12px;
+        letter-spacing:2px;
+        color:var(--accent);
+        text-shadow:0 0 10px var(--accent-soft);
+    }
+    .badge::before{
+        content:"";
+        width:6px; height:6px;
+        border-radius:50%;
+        background:var(--accent);
+        box-shadow:0 0 8px 2px var(--accent);
+    }
 
-            padding: 35px 25px;
+    .gear-btn{
+        width:34px; height:34px;
+        border-radius:10px;
+        border:1px solid var(--bezel);
+        background:var(--bg-deep);
+        color:var(--ink-dim);
+        font-size:16px;
+        cursor:pointer;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        transition:transform .3s ease, color .2s ease, border-color .2s ease;
+    }
+    .gear-btn:hover{ color:var(--accent); border-color:var(--accent); }
+    .gear-btn.open{ transform:rotate(75deg); color:var(--accent); border-color:var(--accent); }
+    .gear-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
-            border-radius: 25px;
+    h1{
+        margin:14px 0 2px;
+        font-size:26px;
+        font-weight:800;
+        letter-spacing:-.3px;
+    }
 
-            text-align: center;
+    .subtitle{
+        color:var(--ink-dim);
+        font-size:13.5px;
+    }
 
-            box-shadow:
-                0 15px 40px
-                rgba(0, 0, 0, 0.10);
-        }
+    /* ---------- price panel ---------- */
 
-        h1 {
-            margin-top: 0;
-            font-size: 30px;
-        }
+    .price-board{
+        margin-top:24px;
+        padding:22px 16px 20px;
+        border-radius:var(--radius-inner);
+        background:
+            repeating-linear-gradient(180deg, rgba(255,255,255,.015) 0 2px, transparent 2px 4px),
+            #0c1114;
+        border:1px solid rgba(255,255,255,.06);
+        box-shadow:inset 0 2px 10px rgba(0,0,0,.55);
+        text-align:center;
+        position:relative;
+    }
 
-        .subtitle {
-            color: #777;
-            margin-bottom: 25px;
-        }
+    .price-board-label{
+        font-size:12.5px;
+        color:var(--ink-faint);
+    }
+    .price-board-label .unit{ color:var(--ink-dim); }
 
-        .price {
+    .price-digits{
+        margin-top:10px;
+        font-family:var(--font);
+        font-variant-numeric:tabular-nums;
+        font-weight:800;
+        font-size:clamp(34px, 10vw, 50px);
+        letter-spacing:1px;
+        color:var(--accent);
+        text-shadow:0 0 18px var(--accent-soft), 0 0 2px rgba(255,255,255,.25);
+        transition:color .3s ease;
+    }
 
-            font-size: 42px;
+    .price-digits.updated{ animation:pulse-glow .7s ease; }
+    @keyframes pulse-glow{
+        0%{ text-shadow:0 0 0 transparent; transform:scale(1); }
+        35%{ text-shadow:0 0 30px var(--accent), 0 0 4px #fff; transform:scale(1.035); }
+        100%{ text-shadow:0 0 18px var(--accent-soft); transform:scale(1); }
+    }
 
-            font-weight: bold;
+    .delta{
+        margin-top:10px;
+        display:inline-flex;
+        align-items:center;
+        gap:6px;
+        font-size:13px;
+        padding:4px 10px;
+        border-radius:20px;
+        background:rgba(255,255,255,.04);
+    }
+    .delta[data-dir="up"]{ color:var(--up); }
+    .delta[data-dir="down"]{ color:var(--down); }
+    .delta .arrow{ font-size:11px; }
 
-            margin: 20px 0;
+    /* ---------- status ---------- */
 
-            direction: ltr;
-        }
+    .status-row{
+        margin-top:18px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:8px;
+        color:var(--ink-dim);
+        font-size:12.5px;
+    }
 
-        .unit {
-            color: #666;
-            font-size: 16px;
-        }
+    .dot{
+        width:8px; height:8px;
+        border-radius:50%;
+        background:var(--up);
+        box-shadow:0 0 10px var(--up);
+    }
+    .dot.error{ background:var(--down); box-shadow:0 0 10px var(--down); }
 
-        .status {
+    /* ---------- ticker ---------- */
 
-            margin-top: 20px;
+    .ticker{
+        margin-top:20px;
+        overflow:hidden;
+        border-top:1px solid rgba(255,255,255,.07);
+    }
+    .ticker-track{
+        display:inline-flex;
+        white-space:nowrap;
+        gap:22px;
+        padding:10px 0 2px;
+        font-size:11.5px;
+        letter-spacing:.4px;
+        color:var(--ink-faint);
+        animation:scroll-left 16s linear infinite;
+    }
+    @keyframes scroll-left{
+        from{ transform:translateX(0); }
+        to{ transform:translateX(-50%); }
+    }
 
-            color: #777;
+    /* ---------- customization drawer ---------- */
 
-            font-size: 14px;
-        }
+    .drawer{
+        max-height:0;
+        overflow:hidden;
+        border-radius:var(--radius-board);
+        background:linear-gradient(180deg, var(--bg-mid), var(--panel));
+        border:1px solid var(--bezel);
+        transition:max-height .4s cubic-bezier(.2,.8,.2,1), opacity .3s ease;
+        opacity:0;
+    }
+    .drawer.open{ max-height:420px; opacity:1; }
 
-        button {
+    .drawer-inner{ padding:18px 20px 20px; }
 
-            margin-top: 20px;
+    .drawer-title{
+        font-size:14px;
+        font-weight:700;
+        color:var(--ink);
+        margin-bottom:14px;
+    }
 
-            padding: 12px 25px;
+    .setting-row{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        padding:10px 0;
+        border-top:1px solid rgba(255,255,255,.06);
+        gap:12px;
+    }
+    .setting-row:first-of-type{ border-top:none; }
 
-            border: none;
+    .setting-label{ font-size:13px; color:var(--ink-dim); }
 
-            border-radius: 12px;
+    .swatches{ display:flex; gap:8px; }
+    .swatch{
+        width:22px; height:22px;
+        border-radius:50%;
+        border:2px solid transparent;
+        cursor:pointer;
+        padding:0;
+    }
+    .swatch[aria-pressed="true"]{ border-color:var(--ink); }
+    .swatch:focus-visible{ outline:2px solid var(--ink); outline-offset:2px; }
 
-            background: #111827;
+    select.custom-select{
+        background:var(--bg-deep);
+        color:var(--ink);
+        border:1px solid var(--bezel);
+        border-radius:8px;
+        padding:6px 10px;
+        font-family:var(--font);
+        font-size:12.5px;
+    }
 
-            color: white;
+    .switch{
+        position:relative;
+        width:38px; height:22px;
+        border-radius:20px;
+        background:var(--bg-deep);
+        border:1px solid var(--bezel);
+        cursor:pointer;
+    }
+    .switch::after{
+        content:"";
+        position:absolute;
+        top:2px; right:2px;
+        width:16px; height:16px;
+        border-radius:50%;
+        background:var(--ink-faint);
+        transition:transform .2s ease, background .2s ease;
+    }
+    .switch[aria-checked="true"]{ background:var(--accent-soft); border-color:var(--accent); }
+    .switch[aria-checked="true"]::after{ transform:translateX(-16px); background:var(--accent); }
+    .switch:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
-            font-size: 15px;
+    .footer{
+        text-align:center;
+        color:var(--ink-faint);
+        font-size:10.5px;
+        line-height:1.9;
+    }
 
-            cursor: pointer;
-        }
-
-        button:active {
-            transform: scale(0.97);
-        }
-
-    </style>
-
+    @media (prefers-reduced-motion: reduce){
+        .board{ animation:none; }
+        .ticker-track{ animation:none; }
+        .price-digits.updated{ animation:none; }
+        .gear-btn{ transition:none; }
+    }
+</style>
 </head>
-
 
 <body>
 
+<div class="stage">
 
-<div class="card">
+    <div class="board" id="board">
+        <span class="rivet tl"></span>
+        <span class="rivet tr"></span>
+        <span class="rivet bl"></span>
+        <span class="rivet br"></span>
 
-    <h1>
-        💵 دلار چنده؟
-    </h1>
+        <div class="board-header">
+            <span class="badge">USD/IRT</span>
+            <button class="gear-btn" id="gearBtn" aria-label="شخصی‌سازی" aria-expanded="false">⚙</button>
+        </div>
 
-    <div class="subtitle">
-        قیمت دلار آزاد
+        <h1>دلار چنده؟</h1>
+        <div class="subtitle">قیمت لحظه‌ای دلار آزاد بازار تهران</div>
+
+        <div class="price-board">
+            <div class="price-board-label">قیمت دلار <span class="unit">(تومان)</span></div>
+            <div id="price" class="price-digits">در حال دریافت...</div>
+            <div class="delta" id="delta" hidden>
+                <span class="arrow" id="deltaArrow"></span>
+                <span id="deltaAmount"></span>
+            </div>
+        </div>
+
+        <div class="status-row">
+            <span class="dot" id="statusDot"></span>
+            <span id="status">در حال اتصال...</span>
+        </div>
+
+        <div class="ticker">
+            <div class="ticker-track">
+                <span>منبع قیمت: TGJU</span><span>•</span>
+                <span>بروزرسانی خودکار</span><span>•</span>
+                <span>دلار آزاد تهران</span><span>•</span>
+                <span>منبع قیمت: TGJU</span><span>•</span>
+                <span>بروزرسانی خودکار</span><span>•</span>
+                <span>دلار آزاد تهران</span><span>•</span>
+            </div>
+        </div>
     </div>
 
-    <div
-        id="price"
-        class="price"
-    >
-        در حال دریافت...
+    <div class="drawer" id="drawer">
+        <div class="drawer-inner">
+            <div class="drawer-title">شخصی‌سازی</div>
+
+            <div class="setting-row">
+                <span class="setting-label">رنگ نمایشگر</span>
+                <div class="swatches" id="swatches">
+                    <button class="swatch" data-accent="#ffb020" style="background:#ffb020" aria-pressed="true" aria-label="کهربایی"></button>
+                    <button class="swatch" data-accent="#22d3c9" style="background:#22d3c9" aria-pressed="false" aria-label="فیروزه‌ای"></button>
+                    <button class="swatch" data-accent="#9d7bff" style="background:#9d7bff" aria-pressed="false" aria-label="یاسی"></button>
+                    <button class="swatch" data-accent="#ff5c8a" style="background:#ff5c8a" aria-pressed="false" aria-label="صورتی"></button>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <span class="setting-label">بازه بروزرسانی</span>
+                <select class="custom-select" id="intervalSelect">
+                    <option value="15000">هر ۱۵ ثانیه</option>
+                    <option value="30000" selected>هر ۳۰ ثانیه</option>
+                    <option value="60000">هر ۶۰ ثانیه</option>
+                    <option value="120000">هر ۲ دقیقه</option>
+                </select>
+            </div>
+
+            <div class="setting-row">
+                <span class="setting-label">افکت صدا هنگام تغییر قیمت</span>
+                <button class="switch" id="soundToggle" role="switch" aria-checked="false"></button>
+            </div>
+
+            <div class="setting-row">
+                <span class="setting-label">حالت فشرده</span>
+                <button class="switch" id="compactToggle" role="switch" aria-checked="false"></button>
+            </div>
+        </div>
     </div>
 
-    <div class="unit">
-        ریال
+    <div class="footer">
+        منبع قیمت: TGJU<br>
+        بروزرسانی خودکار هر ۳۰ ثانیه (قابل تغییر از تنظیمات)
     </div>
-
-    <div
-        id="status"
-        class="status"
-    >
-        در حال دریافت اطلاعات...
-    </div>
-
-    <button onclick="getPrice()">
-        🔄 بروزرسانی
-    </button>
 
 </div>
 
-
 <script>
 
+    /* ============ original price logic — untouched ============ */
 
-const GIST_URL =
-    "https://gist.githubusercontent.com/mohammad123-98/975eb057747899e403301e3a882d9d9b/raw/dollar.json";
+    async function getDollar() {
 
+        try {
 
-async function getPrice() {
+            const response =
+                await fetch(
+                    "/api/dollar",
+                    {
+                        cache: "no-store"
+                    }
+                );
 
-    const priceElement =
-        document.getElementById("price");
+            const data =
+                await response.json();
 
-    const statusElement =
-        document.getElementById("status");
+            if (!data.success) {
 
+                throw new Error(
+                    data.error
+                );
+            }
 
-    try {
+            let price =
+                Number(
+                    data.price
+                        .replace(/,/g, "")
+                );
 
-        statusElement.innerText =
-            "در حال دریافت قیمت...";
+            // Rial → Toman
 
+            price =
+                Math.floor(
+                    price / 10
+                );
 
-        const response =
-            await fetch(
-                GIST_URL + "?t=" + Date.now()
-            );
+            document
+                .getElementById("price")
+                .textContent =
+                price.toLocaleString(
+                    "fa-IR"
+                ) + " تومان";
 
+            document
+                .getElementById("status")
+                .textContent =
+                "آخرین بروزرسانی از TGJU";
 
-        if (!response.ok) {
-
-            throw new Error(
-                "خطا در دریافت اطلاعات"
-            );
-
-        }
-
-
-        const data =
-            await response.json();
-
-
-        if (!data.success) {
-
-            throw new Error(
-                data.error ||
-                "خطای نامشخص"
-            );
-
-        }
-
-
-        const price =
-            String(data.price)
-                .replace(/,/g, "")
-                .replace(/٬/g, "");
-
-
-        priceElement.innerText =
-            Number(price).toLocaleString("fa-IR");
-
-
-        if (data.updated_at) {
-
-            const date =
-                new Date(data.updated_at);
-
-
-            statusElement.innerText =
-                "آخرین بروزرسانی: " +
-                date.toLocaleString("fa-IR");
-
-        } else {
-
-            statusElement.innerText =
-                "قیمت با موفقیت دریافت شد";
+            /* ---- added: visual/UX enhancements on top of the result above ---- */
+            handlePriceUpdate(price);
 
         }
 
+        catch (error) {
 
-    } catch (error) {
+            document
+                .getElementById("price")
+                .textContent =
+                "خطا";
 
-        console.error(error);
+            document
+                .getElementById("status")
+                .textContent =
+                "دریافت قیمت ناموفق بود";
 
-        priceElement.innerText =
-            "خطا";
+            console.error(error);
 
-        statusElement.innerText =
-            "دریافت قیمت ناموفق بود";
-
+            /* ---- added: error state styling ---- */
+            document.getElementById("statusDot").classList.add("error");
+        }
     }
 
-}
+    getDollar();
 
+    let pollHandle = setInterval(getDollar, 30000);
 
-getPrice();
+    /* ============ added: customization & effects layer ============ */
 
+    const priceEl = document.getElementById("price");
+    const deltaEl = document.getElementById("delta");
+    const deltaArrow = document.getElementById("deltaArrow");
+    const deltaAmount = document.getElementById("deltaAmount");
+    const statusDot = document.getElementById("statusDot");
+    const boardEl = document.getElementById("board");
 
-setInterval(
-    getPrice,
-    5 * 60 * 1000
-);
+    let lastPrice = null;
 
+    const settings = Object.assign({
+        accent: "#ffb020",
+        interval: 30000,
+        sound: false,
+        compact: false
+    }, loadSettings());
+
+    function loadSettings(){
+        try {
+            return JSON.parse(localStorage.getItem("dollarBoardSettings") || "{}");
+        } catch(e){ return {}; }
+    }
+
+    function saveSettings(){
+        try {
+            localStorage.setItem("dollarBoardSettings", JSON.stringify(settings));
+        } catch(e){ /* ignore */ }
+    }
+
+    function handlePriceUpdate(newPrice){
+
+        statusDot.classList.remove("error");
+
+        priceEl.classList.remove("updated");
+        void priceEl.offsetWidth; // restart animation
+        priceEl.classList.add("updated");
+
+        if (lastPrice !== null && newPrice !== lastPrice) {
+
+            const diff = newPrice - lastPrice;
+            const up = diff > 0;
+
+            deltaEl.hidden = false;
+            deltaEl.dataset.dir = up ? "up" : "down";
+            deltaArrow.textContent = up ? "▲" : "▼";
+            deltaAmount.textContent = Math.abs(diff).toLocaleString("fa-IR") + " تومان";
+
+            if (settings.sound) playBeep(up);
+        }
+
+        lastPrice = newPrice;
+    }
+
+    let audioCtx;
+    function playBeep(up){
+        try {
+            audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.value = up ? 720 : 420;
+            osc.type = "sine";
+            gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+            osc.connect(gain).connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.25);
+        } catch(e){ /* audio not available */ }
+    }
+
+    /* drawer open/close */
+    const gearBtn = document.getElementById("gearBtn");
+    const drawer = document.getElementById("drawer");
+    gearBtn.addEventListener("click", () => {
+        const open = drawer.classList.toggle("open");
+        gearBtn.classList.toggle("open", open);
+        gearBtn.setAttribute("aria-expanded", open);
+    });
+
+    /* accent swatches */
+    document.querySelectorAll(".swatch").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll(".swatch").forEach(s => s.setAttribute("aria-pressed", "false"));
+            btn.setAttribute("aria-pressed", "true");
+            settings.accent = btn.dataset.accent;
+            applyAccent();
+            saveSettings();
+        });
+    });
+
+    function applyAccent(){
+        const soft = settings.accent + "29"; // ~16% alpha
+        document.documentElement.style.setProperty("--accent", settings.accent);
+        document.documentElement.style.setProperty("--accent-soft", soft);
+    }
+
+    /* refresh interval */
+    const intervalSelect = document.getElementById("intervalSelect");
+    intervalSelect.addEventListener("change", () => {
+        settings.interval = Number(intervalSelect.value);
+        clearInterval(pollHandle);
+        pollHandle = setInterval(getDollar, settings.interval);
+        saveSettings();
+    });
+
+    /* sound toggle */
+    const soundToggle = document.getElementById("soundToggle");
+    soundToggle.addEventListener("click", () => {
+        settings.sound = !settings.sound;
+        soundToggle.setAttribute("aria-checked", settings.sound);
+        saveSettings();
+    });
+
+    /* compact toggle */
+    const compactToggle = document.getElementById("compactToggle");
+    compactToggle.addEventListener("click", () => {
+        settings.compact = !settings.compact;
+        compactToggle.setAttribute("aria-checked", settings.compact);
+        boardEl.classList.toggle("compact", settings.compact);
+        saveSettings();
+    });
+
+    /* apply persisted settings on load */
+    (function initSettings(){
+        applyAccent();
+        document.querySelectorAll(".swatch").forEach(s => {
+            s.setAttribute("aria-pressed", s.dataset.accent.toLowerCase() === settings.accent.toLowerCase());
+        });
+        intervalSelect.value = String(settings.interval);
+        if (settings.interval !== 30000) {
+            clearInterval(pollHandle);
+            pollHandle = setInterval(getDollar, settings.interval);
+        }
+        soundToggle.setAttribute("aria-checked", settings.sound);
+        compactToggle.setAttribute("aria-checked", settings.compact);
+        boardEl.classList.toggle("compact", settings.compact);
+    })();
 
 </script>
 
-
 </body>
-
 </html>
-
-
